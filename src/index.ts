@@ -1,11 +1,15 @@
 import { Command } from 'commander';
-
+import { addDirCommand } from './commands/dir';
+import { onReady } from './utils/dirMs';
 const program = new Command();
 program
+  .name('qs')
+  .description('CLI for quickly starting code')
   .version('1.0.0')
-  .arguments('<command>')
-  .action((command) => {
-    console.log(`User input command: ${command}`);
-  });
+  .usage('[command] [options] [args...]');
 
-program.parse(process.argv);
+addDirCommand(program);
+
+onReady(() => {
+  program.parse(process.argv);
+});
