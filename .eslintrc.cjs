@@ -28,5 +28,7 @@ module.exports = {
         singleQuote: true,
       },
     ],
+
+    '@typescript-eslint/no-explicit-any': 'off',
   },
 };
