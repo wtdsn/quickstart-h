@@ -1,6 +1,5 @@
 import { resolve } from 'path';
 import { ensureFile, readFile, writeFile } from 'fs-extra';
-import { dir } from 'console';
 
 type DirName = string;
 type DirPath = string;

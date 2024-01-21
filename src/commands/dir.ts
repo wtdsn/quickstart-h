@@ -1,6 +1,5 @@
 import { Command } from 'commander';
 import inquirer from 'inquirer';
-import { execa } from 'execa';
 
 import dirMs from '../utils/dirMs';
 import NextCall, { CallBack } from '../utils/nextCall';
@@ -16,7 +15,6 @@ interface DirOptions {
   delete: string[];
   rename: `${string}:${string}`;
   use: string;
-  cd: string | true;
 }
 
 const nextCall = new NextCall<DirOptions>([]);
@@ -36,8 +34,6 @@ function dirActionHandler(options: DirOptions) {
     renameDir,
     // use
     useDir,
-    // cd
-    cdDir,
   ]);
   nextCall.start(options);
 }
@@ -58,8 +54,6 @@ export function addDirCommand(program: Command) {
     .option('-R,--rename <oldName:newName>', 'rename dir')
     // 设置默认目录
     .option('-U,--use <name>', 'use it use default dir')
-    // 进入目录
-    .option('-C,--cd [name]', 'cd to dir')
     .action(dirActionHandler);
 }
 
@@ -210,26 +204,5 @@ const useDir: Cb = async (options) => {
     log.info(`default=${dir}`);
   } catch (err: any) {
     log.warn(err?.message || 'use dir fail');
-  }
-};
-
-// cdDir
-const cdDir: Cb = async (options) => {
-  if (!options.cd) return true;
-  let cdName = options.cd;
-  if (options.cd === true) {
-    cdName = 'default';
-  }
-  const cdDir = dirMs.getDir(cdName as string);
-  if (cdDir === undefined) {
-    log.warn(`dir "${cdName}" not found`);
-    return;
-  }
-  try {
-    const { stdout } = await execa('cd', [cdDir]);
-    console.log('cd', stdout);
-  } catch (err) {
-    console.log('ERR', err);
-    log.warn('cd dir fail');
   }
 };
