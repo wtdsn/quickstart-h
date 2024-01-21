@@ -48,6 +48,7 @@
   "dependencies": {
     "@types/inquirer": "^9.0.7",
     "chalk": "^4.1.2",
+    "execa": "^8.0.1",
     "fs-extra": "^11.2.0",
     "inquirer": "^8.2.6"
   }

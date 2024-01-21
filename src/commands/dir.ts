@@ -1,5 +1,6 @@
 import { Command } from 'commander';
 import inquirer from 'inquirer';
+import { execa } from 'execa';
 
 import dirMs from '../utils/dirMs';
 import NextCall, { CallBack } from '../utils/nextCall';
@@ -14,6 +15,8 @@ interface DirOptions {
   set: `${string}:${string}`;
   delete: string[];
   rename: `${string}:${string}`;
+  use: string;
+  cd: string | true;
 }
 
 const nextCall = new NextCall<DirOptions>([]);
@@ -31,6 +34,10 @@ function dirActionHandler(options: DirOptions) {
     delDir,
     // rename
     renameDir,
+    // use
+    useDir,
+    // cd
+    cdDir,
   ]);
   nextCall.start(options);
 }
@@ -49,6 +56,10 @@ export function addDirCommand(program: Command) {
     )
     // 重命名
     .option('-R,--rename <oldName:newName>', 'rename dir')
+    // 设置默认目录
+    .option('-U,--use <name>', 'use it use default dir')
+    // 进入目录
+    .option('-C,--cd [name]', 'cd to dir')
     .action(dirActionHandler);
 }
 
@@ -182,5 +193,43 @@ const renameDir: Cb = async (options) => {
     log.success('rename dir success');
   } catch (err: any) {
     log.warn(err?.message || 'rename dir fail');
+  }
+};
+
+// useDir
+const useDir: Cb = async (options) => {
+  if (!options.use) return true;
+  const dir = dirMs.getDir(options.use);
+  if (dir === undefined) {
+    log.warn(`dir "${options.use}" not found`);
+    return;
+  }
+  try {
+    await dirMs.pushDir('default', dir);
+    log.success(`use dir ${options.use} success!`);
+    log.info(`default=${dir}`);
+  } catch (err: any) {
+    log.warn(err?.message || 'use dir fail');
+  }
+};
+
+// cdDir
+const cdDir: Cb = async (options) => {
+  if (!options.cd) return true;
+  let cdName = options.cd;
+  if (options.cd === true) {
+    cdName = 'default';
+  }
+  const cdDir = dirMs.getDir(cdName as string);
+  if (cdDir === undefined) {
+    log.warn(`dir "${cdName}" not found`);
+    return;
+  }
+  try {
+    const { stdout } = await execa('cd', [cdDir]);
+    console.log('cd', stdout);
+  } catch (err) {
+    console.log('ERR', err);
+    log.warn('cd dir fail');
   }
 };
