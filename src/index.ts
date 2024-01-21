@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import { addDirCommand } from './commands/dir';
+import addCommand from './commands';
 import { onReady } from './utils/dirMs';
 const program = new Command();
 program
@@ -8,7 +8,7 @@ program
   .version('1.0.0')
   .usage('[command] [options] [args...]');
 
-addDirCommand(program);
+addCommand(program);
 
 onReady(() => {
   program.parse(process.argv);
