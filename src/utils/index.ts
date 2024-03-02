@@ -17,3 +17,14 @@ export function isEmpty(
   }
   return false;
 }
+
+// node process 获取当前设备平台
+export function getPlatform() {
+  if (process.platform === 'win32') {
+    return 'win';
+  } else if (process.platform === 'darwin') {
+    return 'mac';
+  } else {
+    return 'unix';
+  }
+}
