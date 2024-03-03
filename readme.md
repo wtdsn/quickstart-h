@@ -1,5 +1,5 @@
-# quickstart-cli
-quickstart-cli 是一个帮助我们快速打开项目的工具。
+# quickstart-h
+quickstart-h 是一个帮助我们快速打开项目的工具。
 
 **背景**
 > 开发中，项目项目可能会放在 projects 目录下  , 比如 projects/a , projects/b，一些学习用的目录可能放在 learn 目录下，比如 learn/vue , learn/react ， 而一些非正式项目，可能放 practice 下，比如 practice/e , practice/d 。区分不同目录可以让不同类型的项目分类存放管理，但同时，目录多了，要创建一个项目，或者要打开一个项目可能就麻烦了一些。
@@ -8,8 +8,8 @@ quickstart-cli 是一个帮助我们快速打开项目的工具。
 功能并不强大，但希望能给你带来一些帮助或者乐趣等！
 
 ## 安装
-`npm install quickstart-cli -g` \
-`yarn add quickstart-cli -g`
+`npm install quickstart-h -g` \
+`yarn add quickstart-h -g`
 
 
 ## 主要功能包括：
@@ -77,7 +77,7 @@ Options:
 命令 `qs pro --clone <giturl> -I pra`  在 pra 目录中克隆 \
 目录 `qs pro --clone <giturl> -O` 在默认目录中克隆，并且在 vscode 中打开
 ```shell
-> qs pro --clone https://github.com/wtdsn/quickstart-cli.git -O
+> qs pro --clone https://github.com/wtdsn/quickstart-h.git -O
 ```
 
 #### 在打开指定项目

@@ -1,5 +1,5 @@
 {
-  "name": "quickstart-cli",
+  "name": "quickstart-h",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.ts",
@@ -14,7 +14,7 @@
   },
   "files": [
     "dist",
-    "bin/ws.js"
+    "bin/qs.js"
   ],
   "keywords": [
     "cli",
