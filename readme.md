@@ -61,7 +61,7 @@ Options:
 命令： `qs dir -U,--sue <name>` \
 设置 pro 为默认目录，在执行项目操作时，会默认基于此项目
 ```shell
-> qs dir -S pro
+> qs dir -U pro
 ```
 
 #### 创建项目
