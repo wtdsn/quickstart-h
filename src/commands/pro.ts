@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import inquirer from 'inquirer';
 import execa from 'execa';
+import ora from 'ora';
 import path from 'path';
 import fs from 'fs';
 
@@ -138,7 +139,11 @@ const clonePro: Cb = async (options) => {
   }
   const proPath = path.resolve(prosDir, proN);
   try {
+    const spinner = ora('Cloning');
+    spinner.color = 'green';
+    spinner.start();
     await execa('git', ['clone', giturl, proPath]);
+    spinner.stop();
     log.success(`clone ${giturl} into ${proPath} successful`);
     if (typeof options.open === 'boolean') {
       openVscode(proPath);
