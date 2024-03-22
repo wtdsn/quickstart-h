@@ -1,5 +1,7 @@
 import { resolve } from 'path';
-import { ensureFile, readFile, writeFile } from 'fs-extra';
+import os from 'os';
+import { readFile, writeFile } from 'fs';
+import { ensureFile } from 'fs-extra';
 
 type DirName = string;
 type DirPath = string;
@@ -7,7 +9,7 @@ type DirPath = string;
 type DirListItem = [DirName, DirPath];
 
 let readyPromise: Promise<unknown>;
-const DIR_CONF_PATH = resolve(__dirname, '../../.dirConf');
+const DIR_CONF_PATH = resolve(os.homedir(), '.qsDirConf');
 class DirMs {
   public dirList: DirListItem[] = [];
   constructor() {

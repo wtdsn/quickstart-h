@@ -1,10 +1,10 @@
 import { Command } from 'commander';
 import inquirer from 'inquirer';
 
-import dirMs from '../utils/dirMs';
-import NextCall, { CallBack } from '../utils/nextCall';
-import log from '../utils/log';
-import { isEmpty } from '../utils';
+import dirMs from '../utils/dirMs.js';
+import NextCall, { CallBack } from '../utils/nextCall.js';
+import log from '../utils/log.js';
+import { isEmpty } from '../utils/index.js';
 
 const COMMAND_NAME = 'dir';
 

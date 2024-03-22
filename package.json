@@ -1,11 +1,12 @@
 {
   "name": "quickstart-h",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "src/index.ts",
   "bin": {
     "qs": "./bin/qs.js"
   },
+  "type": "module",
   "scripts": {
     "clear": "rimraf dist",
     "build": "npm run clear && tsc",
@@ -51,12 +52,12 @@
     ]
   },
   "dependencies": {
-    "chalk": "^4.1.2",
-    "commander": "^11.1.0",
-    "execa": "^5.1.1",
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "execa": "^8.0.1",
     "fs-extra": "^11.2.0",
-    "inquirer": "^8.2.6",
-    "ora": "^5.3.0"
+    "inquirer": "^9.2.16",
+    "ora": "^8.0.1"
   },
   "engines": {
     "node": ">=12.20.0"

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "ES2020",
     "target": "ES2020",
     "strict": true,
     "esModuleInterop": true,
@@ -8,10 +8,14 @@
     "outDir": "dist",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule":true
+    "resolveJsonModule": true
   },
-  "include": ["src"],
+  "include": [
+    "src"
+  ],
   "exclude": [
-    "dist","bin","node_modules"
+    "dist",
+    "bin",
+    "node_modules"
   ]
 }

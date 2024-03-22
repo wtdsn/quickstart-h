@@ -1,8 +1,9 @@
 import { Command } from 'commander';
-import addCommand from './commands';
-import { onReady } from './utils/dirMs';
+import addCommand from './commands/index.js';
+import { onReady } from './utils/dirMs.js';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
+import { fileURLToPath } from 'url';
 const program = new Command();
 
 program
@@ -17,10 +18,13 @@ onReady(() => {
   program.parse(process.argv);
 });
 
-function readPackageVersion(defult = '1.0.2') {
+function readPackageVersion(defult = '1.0.0') {
   try {
     const data = JSON.parse(
-      readFileSync(resolve(__dirname, '../package.json'), 'utf-8'),
+      readFileSync(
+        resolve(fileURLToPath(import.meta.url), '../../package.json'),
+        'utf-8',
+      ),
     );
     if (data && data.version) return data.version;
     return defult;
