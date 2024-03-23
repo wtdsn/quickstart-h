@@ -22,9 +22,9 @@ dir command is used to manage dirs
 
 Options:
   -L,--list                      list all dirs
-  -G,--get <name>                get dir by name
+  -G,--get <name>                get dir by name. set "default" to get default dir
   -S,--set <name:path>           set dir
-  -D,--delete <name...>          delete dir by names, if delete all,name can be .
+  -D,--delete <name...>          delete dir by names. if delete all,name can be .
   -R,--rename <oldName:newName>  rename dir
   -U,--use <name>                use it use default dir
   -h, --help                     display help for command

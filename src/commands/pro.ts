@@ -2,13 +2,14 @@ import { Command } from 'commander';
 import inquirer from 'inquirer';
 import { execa } from 'execa';
 import ora from 'ora';
+import terminalLink from 'terminal-link';
 import path from 'path';
 import fs from 'fs';
 
 import dirMs from '../utils/dirMs.js';
 import NextCall, { CallBack } from '../utils/nextCall.js';
 import log from '../utils/log.js';
-import { isEmpty } from '../utils/index.js';
+import { isEmpty, getPlatform } from '../utils/index.js';
 
 const COMMAND_NAME = 'pro';
 
@@ -197,14 +198,35 @@ const openPro: Cb = async (options) => {
 };
 
 async function openVscode(path: string) {
-  // 暂时不考虑系统兼容问题
+  // 尝试使用 code 命令
+  let openSuc = false;
   try {
-    await execa('open', ['-a', 'Visual Studio Code', path], {
+    await execa('code', [path], {
       stdio: 'inherit',
     });
-    log.success(`Open project ${path} successfuly`);
-  } catch (err) {
-    log.error('can not open Visual Studio Code! path:' + path);
-    throw err;
+    openSuc = true;
+  } catch {
+    if (getPlatform() === 'mac') {
+      try {
+        await execa('open', ['-a', 'Visual Studio Code', path], {
+          stdio: 'inherit',
+        });
+        openSuc = true;
+      } catch {
+        /* empty */
+      }
+    }
   }
+  if (openSuc) {
+    log.success(`Open project ${path} successfuly`);
+    return;
+  }
+
+  log.error('can not open Visual Studio Code! path:' + path);
+  log.info(
+    terminalLink(
+      'something maybe you can try',
+      'https://vscode.github.net.cn/docs/editor/command-line',
+    ),
+  );
 }

@@ -28,3 +28,12 @@ export function getPlatform() {
     return 'unix';
   }
 }
+
+export function splitOnce(str: string, separator: string) {
+  const index = str.indexOf(separator);
+  if (index === -1) {
+    return [str, ''];
+  } else {
+    return [str.slice(0, index), str.slice(index + separator.length)];
+  }
+}

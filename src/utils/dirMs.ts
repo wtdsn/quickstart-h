@@ -2,6 +2,7 @@ import { resolve } from 'path';
 import os from 'os';
 import { readFile, writeFile } from 'fs';
 import { ensureFile } from 'fs-extra';
+import { isEmpty } from './index.js';
 
 type DirName = string;
 type DirPath = string;
@@ -38,10 +39,13 @@ class DirMs {
     return this.dirList.map((item) => item[1]);
   }
 
+  getDirItem(name: DirName) {
+    if (isEmpty(name)) throw new Error('dir name is invalid');
+    return this.dirList.find((v) => v[0] === name);
+  }
+
   async pushDir(dirName: DirName, dirPath: DirPath) {
-    const findItem = this.dirList.find((item) => {
-      if (item[0] === dirName) return true;
-    });
+    const findItem = this.getDirItem(dirName);
     if (findItem) {
       findItem[1] = dirPath;
     } else this.dirList.push([dirName, dirPath]);
@@ -49,22 +53,25 @@ class DirMs {
   }
 
   getDir(name: DirName) {
-    const findItem = this.dirList.find((item) => {
-      if (item[0] === name) return true;
-    });
+    const findItem = this.getDirItem(name);
     if (findItem) return findItem[1];
     return undefined;
   }
 
   async rename(oldName: DirName, newName: DirName) {
-    const findItem = this.dirList.find((item) => {
-      if (item[0] === oldName) return true;
-    });
-    if (!findItem) {
-      throw new Error(`dir ${oldName} is not exit`);
+    const findoldItem = this.getDirItem(oldName);
+    if (!findoldItem) {
+      throw new Error(`dir "${oldName}" is not exit`);
     }
 
-    findItem[0] = newName;
+    const findnewItem = this.getDirItem(newName);
+    if (findnewItem) {
+      throw new Error(
+        `dir ${newName} already exist,you can not use same name in different path`,
+      );
+    }
+
+    findoldItem[0] = newName;
     await this._saveConf();
     return true;
   }

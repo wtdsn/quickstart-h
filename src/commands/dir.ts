@@ -4,7 +4,7 @@ import inquirer from 'inquirer';
 import dirMs from '../utils/dirMs.js';
 import NextCall, { CallBack } from '../utils/nextCall.js';
 import log from '../utils/log.js';
-import { isEmpty } from '../utils/index.js';
+import { isEmpty, splitOnce } from '../utils/index.js';
 
 const COMMAND_NAME = 'dir';
 
@@ -44,11 +44,14 @@ export function addDirCommand(program: Command) {
     .command(COMMAND_NAME)
     .description('dir command is used to manage dirs')
     .option('-L,--list', 'list all dirs')
-    .option('-G,--get <name>', 'get dir by name')
+    .option(
+      '-G,--get <name>',
+      'get dir by name. set "default" to get default dir',
+    )
     .option('-S,--set <name:path>', 'set dir')
     .option(
       '-D,--delete <name...>',
-      'delete dir by names, if delete all,name can be .',
+      'delete dir by names. if delete all,name can be .',
     )
     // 重命名
     .option('-R,--rename <oldName:newName>', 'rename dir')
@@ -69,9 +72,26 @@ const listDirs: Cb = (options) => {
     return;
   }
 
+  let defaultItem: (typeof list)[0];
+  const dir2nameMap: Record<string, string> = {};
   list.forEach((item) => {
-    log.info(item.join('='));
+    if (item[0] === 'default') {
+      defaultItem = item;
+      return;
+    }
+    dir2nameMap[item[1]] = item[0];
+    log.info('> ' + item.join(' = '));
   });
+
+  if (defaultItem!) {
+    if (dir2nameMap[defaultItem[1]]) {
+      log.info(
+        `> default = ${dir2nameMap[defaultItem[1]]} = ${defaultItem[1]}`,
+      );
+    } else {
+      log.info(`> default = ${defaultItem[1]}`);
+    }
+  }
 };
 
 // get
@@ -89,17 +109,16 @@ const getDirByName: Cb = (options) => {
 // set
 const setDir: Cb = async (options) => {
   if (!options.set) return true;
-  const dirItem = options.set.split(':');
-  if (dirItem.length !== 2 || isEmpty(dirItem[0]) || isEmpty(dirItem[1])) {
+
+  const dirItem = splitOnce(options.set, ':');
+  if (isEmpty(dirItem[0]) || isEmpty(dirItem[1])) {
     log.warn(
       `argument "${options.set}" is not valid, it should be like "name:path"`,
     );
     return;
   }
+
   const [name, dir] = dirItem;
-
-  // todo 检测 name 和 dir 是否合法
-
   let preDir = dirMs.getDir(name);
 
   // 覆盖
@@ -167,7 +186,7 @@ const delDir: Cb = async (options) => {
 // rename
 const renameDir: Cb = async (options) => {
   if (!options.rename) return true;
-  const renameItem = options.rename.split(':');
+  const renameItem = options.rename.split(':').map((v) => v.trim());
   if (
     renameItem.length !== 2 ||
     isEmpty(renameItem[0]) ||
@@ -178,9 +197,13 @@ const renameDir: Cb = async (options) => {
     );
     return;
   }
-  const [oldName, newName] = renameItem;
 
-  // todo 检测 oldName 和 newName 是否合法
+  if (renameItem.includes('default')) {
+    log.warn('name can not be "default"');
+    return;
+  }
+
+  const [oldName, newName] = renameItem;
 
   try {
     await dirMs.rename(oldName, newName);
@@ -201,7 +224,7 @@ const useDir: Cb = async (options) => {
   try {
     await dirMs.pushDir('default', dir);
     log.success(`use dir ${options.use} success!`);
-    log.info(`default=${dir}`);
+    log.info(`default = ${dir}`);
   } catch (err: any) {
     log.warn(err?.message || 'use dir fail');
   }
