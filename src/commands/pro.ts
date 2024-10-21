@@ -5,6 +5,7 @@ import ora from 'ora';
 import terminalLink from 'terminal-link';
 import path from 'path';
 import fs from 'fs';
+import searchList from 'inquirer-search-list';
 
 import dirMs from '../utils/dirMs.js';
 import NextCall, { CallBack } from '../utils/nextCall.js';
@@ -179,18 +180,20 @@ const openPro: Cb = async (options) => {
       return;
     }
   } else {
+    inquirer.registerPrompt('search-list', searchList);
     // 5. 没有指定项目名，则询问用户
     const res = await inquirer.prompt([
       {
-        type: 'rawlist',
+        type: 'search-list',
         name: 'proN',
         message: 'select the project which you want to open',
         loop: true,
-        choices: pros,
+        choices: pros.map((v, i) => `${i}) ${v}`),
         pageSize: 20,
       },
     ]);
-    proN = res.proN;
+    const originProN = res.proN.split(')').slice(1).join('').trim();
+    proN = originProN;
   }
 
   const fullDir = path.join(prosDir!, proN!);

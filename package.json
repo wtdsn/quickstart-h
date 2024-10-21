@@ -1,6 +1,6 @@
 {
   "name": "quickstart-h",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "",
   "main": "src/index.ts",
   "bin": {
@@ -57,6 +57,7 @@
     "execa": "^8.0.1",
     "fs-extra": "^11.2.0",
     "inquirer": "^9.2.16",
+    "inquirer-search-list": "^1.2.6",
     "ora": "^8.0.1",
     "terminal-link": "^3.0.0"
   },
